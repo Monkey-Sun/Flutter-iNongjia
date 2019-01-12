@@ -8,11 +8,11 @@ part of 'model.dart';
 
 Model _$ModelFromJson(Map<String, dynamic> json) {
   return Model(
-      json['Status'] as String,
       json['StatusDesc'] as String,
+      json['Status'] as String,
       json['Context'] == null
           ? null
-          : Mcontext.fromJson(json['Context'] as Map<String, dynamic>));
+          : Res.fromJson(json['Context'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$ModelToJson(Model instance) => <String, dynamic>{
@@ -21,22 +21,50 @@ Map<String, dynamic> _$ModelToJson(Model instance) => <String, dynamic>{
       'Context': instance.Context
     };
 
-Mcontext _$McontextFromJson(Map<String, dynamic> json) {
-  return Mcontext((json['chosens'] as List)
-      ?.map((e) => e == null ? null : Goods.fromJson(e as Map<String, dynamic>))
-      ?.toList());
+Res _$ResFromJson(Map<String, dynamic> json) {
+  return Res(
+      (json['modulesvm'] as List)
+          ?.map((e) =>
+              e == null ? null : Goods.fromJson(e as Map<String, dynamic>))
+          ?.toList(),
+      (json['chosens'] as List)
+          ?.map((e) =>
+              e == null ? null : Goods.fromJson(e as Map<String, dynamic>))
+          ?.toList());
 }
 
-Map<String, dynamic> _$McontextToJson(Mcontext instance) =>
-    <String, dynamic>{'chosens': instance.chosens};
+Map<String, dynamic> _$ResToJson(Res instance) => <String, dynamic>{
+      'modulesvm': instance.modulesvm,
+      'chosens': instance.chosens
+    };
 
 Goods _$GoodsFromJson(Map<String, dynamic> json) {
-  return Goods(json['productName'] as String, json['productDesc'] as String,
-      json['cover'] as String);
+  return Goods(
+      json['productId'] as int,
+      json['productName'] as String,
+      json['productStatus'] as int,
+      json['area'] as String,
+      json['avatar'] as String,
+      json['nickname'] as String,
+      (json['rawPrice'] as num)?.toDouble(),
+      (json['price'] as num)?.toDouble(),
+      json['cover'] as String,
+      json['productDesc'] as String,
+      (json['percent'] as num)?.toDouble(),
+      json['tagName'] as String);
 }
 
 Map<String, dynamic> _$GoodsToJson(Goods instance) => <String, dynamic>{
+      'productId': instance.productId,
       'productName': instance.productName,
+      'productStatus': instance.productStatus,
+      'area': instance.area,
+      'avatar': instance.avatar,
+      'nickname': instance.nickname,
+      'rawPrice': instance.rawPrice,
+      'price': instance.price,
+      'cover': instance.cover,
       'productDesc': instance.productDesc,
-      'cover': instance.cover
+      'percent': instance.percent,
+      'tagName': instance.tagName
     };

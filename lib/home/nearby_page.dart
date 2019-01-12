@@ -21,24 +21,23 @@ class NearbyState extends State<NearbyPage> with AutomaticKeepAliveClientMixin {
 
   Widget _buildList() {
     return new ListView.builder(
-      itemCount: 100,
-        itemBuilder: (BuildContext context, index){
-        return _buildRow(index);
+        itemCount: 100,
+        itemBuilder: (BuildContext context, index) {
+          return _buildRow(index);
         });
   }
 
-  Widget _buildRow(index){
+  Widget _buildRow(index) {
     return Container(
-      padding: EdgeInsets.all(30.0),
-      color: Colors.cyan,
-      child: SizedBox(
-        width: 375.0,
-        height: 80.0,
-        child: Text(
-          '$index',
-          style: TextStyle(fontSize: 72.0, color: Colors.white),
-        ),
-      )
-    );
+        padding: EdgeInsets.all(30.0),
+        color: Colors.cyan,
+        child: SizedBox(
+          width: 375.0,
+          height: 80.0,
+          child: Text(
+            '$index',
+            style: TextStyle(fontSize: 72.0, color: Colors.white),
+          ),
+        ));
   }
 }
