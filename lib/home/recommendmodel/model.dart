@@ -20,8 +20,9 @@ class Model {
 class Res {
   final List<Goods> modulesvm;
   final List<Goods> chosens;
+  final List<Banner> midBanners;
 
-  Res(this.modulesvm, this.chosens);
+  Res(this.modulesvm, this.chosens, this.midBanners);
 
   //不同的类使用不同的mixin即可
   factory Res.fromJson(Map<String, dynamic> json) => _$ResFromJson(json);
@@ -62,4 +63,16 @@ class Goods {
   factory Goods.fromJson(Map<String, dynamic> json) => _$GoodsFromJson(json);
 
   Map<String, dynamic> toJson() => _$GoodsToJson(this);
+}
+
+
+@JsonSerializable()
+
+class Banner extends Object{
+  final String imgUrl;
+  Banner(this.imgUrl);
+
+  factory Banner.fromJson(Map<String, dynamic> json) => _$BannerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BannerToJson(this);
 }

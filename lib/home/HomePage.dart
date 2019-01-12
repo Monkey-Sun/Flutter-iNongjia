@@ -24,6 +24,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
             tabs: [new Tab(text: "推荐"), new Tab(text: "附近")],
           ),
         ),
+        backgroundColor: Color(0xFFDCDCDC),
         body: new TabBarView(children: [new RecommendPage(), new NearbyPage()]),
       ),
     );

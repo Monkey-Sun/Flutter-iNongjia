@@ -30,12 +30,17 @@ Res _$ResFromJson(Map<String, dynamic> json) {
       (json['chosens'] as List)
           ?.map((e) =>
               e == null ? null : Goods.fromJson(e as Map<String, dynamic>))
+          ?.toList(),
+      (json['midBanners'] as List)
+          ?.map((e) =>
+              e == null ? null : Banner.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
 Map<String, dynamic> _$ResToJson(Res instance) => <String, dynamic>{
       'modulesvm': instance.modulesvm,
-      'chosens': instance.chosens
+      'chosens': instance.chosens,
+      'midBanners': instance.midBanners
     };
 
 Goods _$GoodsFromJson(Map<String, dynamic> json) {
@@ -68,3 +73,10 @@ Map<String, dynamic> _$GoodsToJson(Goods instance) => <String, dynamic>{
       'percent': instance.percent,
       'tagName': instance.tagName
     };
+
+Banner _$BannerFromJson(Map<String, dynamic> json) {
+  return Banner(json['imgUrl'] as String);
+}
+
+Map<String, dynamic> _$BannerToJson(Banner instance) =>
+    <String, dynamic>{'imgUrl': instance.imgUrl};

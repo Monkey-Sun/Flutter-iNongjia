@@ -21,7 +21,9 @@ class RecommendState extends State<RecommendPage>
   @override
   bool get wantKeepAlive => true;
   Model model;
-  bool  fail = false;
+  bool fail = false;
+  bool loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,11 @@ class RecommendState extends State<RecommendPage>
   }
 
   _getHomeData() async {
+    setState(() {
+      loading = true;
+    });
+    bool tempfail;
+    var result;
     var url = 'https://api.inongjia.net/api/v3/wxappapi/home';
     var httpClient = new HttpClient();
     try {
@@ -37,20 +44,19 @@ class RecommendState extends State<RecommendPage>
       if (response.statusCode == HttpStatus.ok) {
         var json = await response.transform(utf8.decoder).join();
         Map modelMap = jsonDecode(json);
-        setState(() {
-          model = new Model.fromJson(modelMap);
-        });
-        print("请求成功");
+        result = new Model.fromJson(modelMap);
       } else {
-        setState(() {
-          fail = true;
-        });
+        tempfail = true;
       }
     } catch (exception) {
-      setState(() {
-        fail = true;
-      });
+      tempfail = true;
     }
+
+    setState(() {
+      fail = tempfail;
+      loading = false;
+      model = result;
+    });
   }
 
   @override
@@ -58,39 +64,65 @@ class RecommendState extends State<RecommendPage>
     // TODO: implement build
     if (model != null) {
       return ListView.builder(
-          itemCount: model.Context.modulesvm.length,
+          itemCount: model.Context.modulesvm.length + 2,
           itemBuilder: (BuildContext context, int index) {
-            return _buildItem(index, model.Context.modulesvm[index]);
+            return _buildItem(index);
           });
-    } else if(fail) {
+    } else if (fail) {
       return new Center(
-        child: new FlatButton(onPressed: (){
-          _getHomeData();
-        }, child: new Text("网络断开了，点击重试")),
+        child: new FlatButton(
+            onPressed: () {
+              _getHomeData();
+            },
+            child: new Text("网络断开了，点击重试")),
       );
-    }else{
+    } else if (loading) {
       return new Center(
         child: new CupertinoActivityIndicator(),
       );
     }
   }
 
-  Widget _buildItem(int index, Goods item) {
-    return new Container(
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-        child: new FlatButton(
-            onPressed: () {
-              AnimationNavi.push(context,
-                  new GoodsDetailPage(productDesc: item.productDesc, option: 1),
-                  (res) {
-                print(res);
-              });
-            },
-            child: _buildBottomRow(item)));
+  Widget _buildItem(int index) {
+    if (index == 0) {
+      return new Container(
+        height: 110,
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+        child: new Image.network(model.Context.midBanners[0].imgUrl),
+      );
+    } else if (index == 1) {
+      return new Container(
+          color: Colors.white,
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          height: 170,
+          child: new ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: model.Context.modulesvm.length,
+              itemBuilder: (BuildContext content, int index) {
+                return _buildItemWidget(model.Context.modulesvm[index]);
+              }));
+    } else {
+      return new Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+          child: new FlatButton(
+              onPressed: () {
+                AnimationNavi.push(
+                    context,
+                    new GoodsDetailPage(
+                        productDesc:
+                            model.Context.modulesvm[index - 2].productDesc,
+                        option: 1), (res) {
+                  print(res);
+                });
+              },
+              child: _buildGoodsRow(model.Context.modulesvm[index - 2])));
+    }
   }
 }
 
-Widget _buildBottomRow(Goods item) {
+Widget _buildGoodsRow(Goods item) {
   return new Column(
     children: <Widget>[
       new Row(
@@ -101,8 +133,7 @@ Widget _buildBottomRow(Goods item) {
             decoration: new BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 image: DecorationImage(image: NetworkImage(item.cover)),
-                color: Colors.grey
-            ),
+                color: Colors.grey),
           ),
           new Expanded(
               child: new Container(
@@ -112,17 +143,23 @@ Widget _buildBottomRow(Goods item) {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                new Text(
-                  item.productName,
-                  style: GlobalConfig.t1,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  item.productDesc,
-                  style: GlobalConfig.t2,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      item.productName,
+                      style: GlobalConfig.t1,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      item.productDesc,
+                      style: GlobalConfig.t2,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
                 new Container(
                     margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -164,5 +201,50 @@ Widget _buildBottomRow(Goods item) {
         height: 1,
       )
     ],
+  );
+}
+
+Widget _buildItemWidget(Goods item) {
+  return new Container(
+    width: 106,
+    margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+    child: new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        new Image.network(
+          item.cover,
+          width: 106,
+          height: 106,
+        ),
+        new Text(
+          item.productName,
+          maxLines: 1,
+          style: GlobalConfig.t1,
+        ),
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          textBaseline: TextBaseline.ideographic,
+          children: <Widget>[
+            new Text("￥",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFFE97459),
+                    fontFamily: 'PingFang-SC-Heavy')),
+            new Text(
+              item.price.toStringAsFixed(2),
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xFFE97459),
+                  fontFamily: 'PingFang-SC-Heavy'),
+            )
+          ],
+        ),
+        new Text('￥${item.rawPrice.toStringAsFixed(2)}',
+            style: TextStyle(
+                fontSize: 10,
+                color: Color(0xFF999999),
+                decorationStyle: TextDecorationStyle.dashed))
+      ],
+    ),
   );
 }
