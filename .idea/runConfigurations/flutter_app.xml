@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="flutter_app" type="FlutterRunConfigurationType" factoryName="Flutter" activateToolWindowBeforeRun="false" singleton="true">
+    <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+    <method />
+  </configuration>
+</component>
