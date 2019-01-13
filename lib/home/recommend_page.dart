@@ -7,6 +7,8 @@ import 'goods_detail.dart';
 import 'package:flutter_app/home/recommendmodel/model.dart';
 import 'package:flutter_app/animation_navigator.dart';
 import 'package:flutter_app/customwidget/custom_progress.dart';
+import 'package:flutter_app/customwidget/custom_swiper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RecommendPage extends StatefulWidget {
   @override
@@ -88,7 +90,17 @@ class RecommendState extends State<RecommendPage>
       return new Container(
         height: 110,
         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        child: new Image.network(model.Context.midBanners[0].imgUrl),
+        child: new CustomSwiper(model.Context.midBanners.map((item)=> item.imgUrl).toList(), (index){
+          print('点击了${index}');
+          Fluttertoast.showToast(
+              msg: "点击了第${index}个图片",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.cyan,
+              textColor: Colors.white
+          );
+        }),
       );
     } else if (index == 1) {
       return new Container(

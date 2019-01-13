@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import 'nearby_page.dart';
 import 'recommend_page.dart';
+import 'package:flutter_app/global_config.dart';
+import 'package:flutter_app/customwidget/custom_searchbar.dart';
 
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new HomePageState();
 }
 
-class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  TabController _tabController;
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return new DefaultTabController(
-      length: 2,
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: new Text("首页"),
-          bottom: new TabBar(
-            tabs: [new Tab(text: "推荐"), new Tab(text: "附近")],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [Tab(text:"推荐"), Tab(text:"附近")],
         ),
-        backgroundColor: Color(0xFFDCDCDC),
-        body: new TabBarView(children: [new RecommendPage(), new NearbyPage()]),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [RecommendPage(), new NearbyPage()],
       ),
     );
   }

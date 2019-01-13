@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class GlobalConfig {
   static bool dark = true;
   static ThemeData themeData = new ThemeData(
-    primaryColor: Color.fromRGBO(233, 116, 89, 1.0)
+    primaryColor: Color(0xFFF5F5F5)
   );
-  static Color searchBackgroundColor = Colors.white10;
-  static Color cardBackgroundColor = new Color(0xFF222222);
+  static Color appBarBackgroundColor = new Color(0xFFF5F5F5);
+  static Color pageBackgroundColor = new Color(0xFFDCDCDC);
   static Color fontColor = Colors.white30;
 
   static TextStyle t1 = TextStyle(
