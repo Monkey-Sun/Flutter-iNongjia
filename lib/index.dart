@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_app/home/HomePage.dart';
-import 'package:flutter_app/home/recommend_page.dart';
+import 'package:flutter_app/home/HomePage.dart';
+//import 'package:flutter_app/home/recommend_page.dart';
 import 'package:flutter_app/fenlei/CatogoryPage.dart';
 import 'package:flutter_app/global_config.dart';
 import 'package:flutter_app/profile/Profile.dart';
@@ -19,15 +19,15 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     _navigationItems = <BottomNavigationBarItem>[
-      new BottomNavigationBarItem(
-          icon: new Icon(Icons.assignment), title: new Text("首页")),
-      new BottomNavigationBarItem(
-          icon: new Icon(Icons.all_inclusive), title: new Text("分类")),
-      new BottomNavigationBarItem(
-          icon: new Icon(Icons.add_alert), title: new Text("个人"))
+       BottomNavigationBarItem(
+          icon:  Icon(Icons.home), title:  Text("首页")),
+       BottomNavigationBarItem(
+          icon:  Icon(Icons.camera), title:  Text("分类")),
+       BottomNavigationBarItem(
+          icon:  Icon(Icons.person), title:  Text("个人"))
     ];
 
-    _screens = [new RecommendPage(), new CatogoryPage(), new ProfilePage()];
+    _screens = [ HomePage(),  CatogoryPage(),  ProfilePage()];
   }
 
   @override
@@ -37,7 +37,7 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationBar _bottomNavigationBar = new BottomNavigationBar(
+    final BottomNavigationBar _bottomNavigationBar =  BottomNavigationBar(
         items: _navigationItems,
         currentIndex: _currentIndex,
         fixedColor: Colors.blue,
@@ -49,11 +49,7 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
         });
 
     return new Scaffold(
-      appBar: new AppBar(
-        title: _buildSearchInput(context),
-        backgroundColor: GlobalConfig.appBarBackgroundColor,
-        brightness: Brightness.dark,
-      ),
+      appBar: null,
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
@@ -65,8 +61,4 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-}
-
-Widget _buildSearchInput(BuildContext context) {
-  return new SearchInput((value) async {}, (value) {}, () {});
 }

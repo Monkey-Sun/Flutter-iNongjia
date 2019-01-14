@@ -375,14 +375,14 @@ class SearchInput extends StatelessWidget {
     return new Container(
       height: 40.0,
       decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
+          color: Color(0xFFEFEFEF),
           borderRadius: BorderRadius.circular(4.0)),
       child: new Row(
         children: <Widget>[
           new Padding(
             padding: new EdgeInsets.only(right: 10.0, top: 3.0, left: 10.0),
             child: new Icon(Icons.search,
-                size: 24.0, color: Theme.of(context).accentColor),
+                size: 24.0, color:Color(0xFF7F7F7F)),
           ),
           new Expanded(
             child: new MaterialSearchInput(

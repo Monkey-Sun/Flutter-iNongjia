@@ -65,11 +65,13 @@ class RecommendState extends State<RecommendPage>
   Widget build(BuildContext context) {
     // TODO: implement build
     if (model != null) {
-      return ListView.builder(
-          itemCount: model.Context.modulesvm.length + 2,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildItem(index);
-          });
+      return ListView.separated(
+        itemCount: model.Context.modulesvm.length + 2,
+        itemBuilder: (BuildContext context, int index) => _buildItem(index),
+        separatorBuilder: (BuildContext context, int index){
+          return Divider(height: 1.0, color:index < 3 ? Colors.white:Color(0xFF999999));
+        }
+      );
     } else if (fail) {
       return new Center(
         child: new FlatButton(
@@ -79,8 +81,8 @@ class RecommendState extends State<RecommendPage>
             child: new Text("网络断开了，点击重试")),
       );
     } else if (loading) {
-      return new Center(
-        child: new CupertinoActivityIndicator(),
+      return Center(
+        child: CircularProgressIndicator(),
       );
     }
   }
@@ -90,7 +92,9 @@ class RecommendState extends State<RecommendPage>
       return new Container(
         height: 110,
         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        child: new CustomSwiper(model.Context.midBanners.map((item)=> item.imgUrl).toList(), (index){
+        child: new CustomSwiper(
+            model.Context.midBanners.map((item) => item.imgUrl).toList(),
+            (index) {
           print('点击了${index}');
           Fluttertoast.showToast(
               msg: "点击了第${index}个图片",
@@ -98,8 +102,7 @@ class RecommendState extends State<RecommendPage>
               gravity: ToastGravity.CENTER,
               timeInSecForIos: 1,
               backgroundColor: Colors.cyan,
-              textColor: Colors.white
-          );
+              textColor: Colors.white);
         }),
       );
     } else if (index == 1) {
@@ -107,17 +110,43 @@ class RecommendState extends State<RecommendPage>
           color: Colors.white,
           margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          height: 170,
-          child: new ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: model.Context.modulesvm.length,
-              itemBuilder: (BuildContext content, int index) {
-                return _buildItemWidget(model.Context.modulesvm[index]);
-              }));
+          height: 220,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding:EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network('http://img.inongjia.net/wxapp/images/home_cnxh_n.png', width:78, height: 26,)
+                  ],
+                ),
+              ),
+              Expanded(child:
+              new ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: model.Context.modulesvm.length,
+                  itemBuilder: (BuildContext content, int index) {
+                    return _buildScrollItem(model.Context.modulesvm[index]);
+                  }))
+            ],
+          )
+      );
+    }if(index == 2){
+      return  Container(
+        color: Colors.white,
+        padding:EdgeInsets.fromLTRB(15, 10, 0, 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Image.network('http://img.inongjia.net/wxapp/images/xlqg@2x.png', width:78, height: 26,)
+          ],
+        ),
+      );
     } else {
       return new Container(
           color: Colors.white,
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+          padding: EdgeInsets.all(15),
           child: new FlatButton(
               onPressed: () {
                 AnimationNavi.push(
@@ -133,7 +162,7 @@ class RecommendState extends State<RecommendPage>
     }
   }
 }
-
+// 底部的row
 Widget _buildGoodsRow(Goods item) {
   return new Column(
     children: <Widget>[
@@ -206,17 +235,13 @@ Widget _buildGoodsRow(Goods item) {
             ),
           ))
         ],
-      ),
-      new Container(
-        margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-        color: Colors.grey,
-        height: 1,
       )
     ],
   );
 }
 
-Widget _buildItemWidget(Goods item) {
+// 滚动的商品
+Widget _buildScrollItem(Goods item) {
   return new Container(
     width: 106,
     margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
