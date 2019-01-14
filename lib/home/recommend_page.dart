@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/global_config.dart';
-import 'dart:io';
-import 'dart:convert';
+import 'package:flutter_app/utils/http_manager.dart';
 import 'goods_detail.dart';
 import 'package:flutter_app/home/recommendmodel/model.dart';
 import 'package:flutter_app/animation_navigator.dart';
@@ -23,8 +22,7 @@ class RecommendState extends State<RecommendPage>
   @override
   bool get wantKeepAlive => true;
   Model model;
-  bool fail = false;
-  bool loading = false;
+  RequestStatu statu = RequestStatu.loading;
 
   @override
   void initState() {
@@ -32,32 +30,21 @@ class RecommendState extends State<RecommendPage>
     _getHomeData();
   }
 
-  _getHomeData() async {
-    setState(() {
-      loading = true;
-    });
-    bool tempfail;
+  _getHomeData(){
     var result;
-    var url = 'https://api.inongjia.net/api/v3/wxappapi/home';
-    var httpClient = new HttpClient();
-    try {
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
-      if (response.statusCode == HttpStatus.ok) {
-        var json = await response.transform(utf8.decoder).join();
-        Map modelMap = jsonDecode(json);
-        result = new Model.fromJson(modelMap);
-      } else {
-        tempfail = true;
-      }
-    } catch (exception) {
-      tempfail = true;
-    }
-
     setState(() {
-      fail = tempfail;
-      loading = false;
-      model = result;
+      statu = RequestStatu.loading;
+    });
+    HttpShareManager().get('v3/wxappapi/home', null, (res) {
+      result = new Model.fromJson(res);
+      setState(() {
+        statu = RequestStatu.success;
+        model = result;
+      });
+    }, (exception) {
+      setState(() {
+        statu = RequestStatu.fail;
+      });
     });
   }
 
@@ -66,24 +53,27 @@ class RecommendState extends State<RecommendPage>
     // TODO: implement build
     if (model != null) {
       return ListView.separated(
-        itemCount: model.Context.modulesvm.length + 2,
-        itemBuilder: (BuildContext context, int index) => _buildItem(index),
-        separatorBuilder: (BuildContext context, int index){
-          return Divider(height: 1.0, color:index < 3 ? Colors.white:Color(0xFF999999));
-        }
-      );
-    } else if (fail) {
-      return new Center(
-        child: new FlatButton(
-            onPressed: () {
-              _getHomeData();
-            },
-            child: new Text("网络断开了，点击重试")),
-      );
-    } else if (loading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+          itemCount: model.Context.modulesvm.length + 2,
+          itemBuilder: (BuildContext context, int index) => _buildItem(index),
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+                height: 1.0,
+                color: index < 3 ? Colors.white : Color(0xFF999999));
+          });
+    }else{
+      if(statu == RequestStatu.fail){
+        return new Center(
+          child: new FlatButton(
+              onPressed: () {
+                _getHomeData();
+              },
+              child: new Text("网络断开了，点击重试")),
+        );
+      }else{
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
     }
   }
 
@@ -114,32 +104,40 @@ class RecommendState extends State<RecommendPage>
           child: Column(
             children: <Widget>[
               Container(
-                padding:EdgeInsets.fromLTRB(0, 10, 0, 10),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Image.network('http://img.inongjia.net/wxapp/images/home_cnxh_n.png', width:78, height: 26,)
+                    Image.network(
+                      'http://img.inongjia.net/wxapp/images/home_cnxh_n.png',
+                      width: 78,
+                      height: 26,
+                    )
                   ],
                 ),
               ),
-              Expanded(child:
-              new ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: model.Context.modulesvm.length,
-                  itemBuilder: (BuildContext content, int index) {
-                    return _buildScrollItem(model.Context.modulesvm[index]);
-                  }))
+              Expanded(
+                  child: new ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: model.Context.modulesvm.length,
+                      itemBuilder: (BuildContext content, int index) {
+                        return _buildScrollItem(model.Context.modulesvm[index]);
+                      }))
             ],
-          )
-      );
-    }if(index == 2){
-      return  Container(
+          ));
+    }
+    if (index == 2) {
+      return Container(
         color: Colors.white,
-        padding:EdgeInsets.fromLTRB(15, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Image.network('http://img.inongjia.net/wxapp/images/xlqg@2x.png', width:78, height: 26,)
+            Image.network(
+              'http://img.inongjia.net/wxapp/images/xlqg@2x.png',
+              width: 78,
+              height: 26,
+            )
           ],
         ),
       );
@@ -162,6 +160,7 @@ class RecommendState extends State<RecommendPage>
     }
   }
 }
+
 // 底部的row
 Widget _buildGoodsRow(Goods item) {
   return new Column(

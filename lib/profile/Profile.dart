@@ -12,6 +12,15 @@ class CatogoryPageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Center(child: new Text("个人"));
+    return new MaterialApp(
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('我'),
+        ),
+        body: Center(
+          child: Text("我"),
+        ),
+      ),
+    );
   }
 }

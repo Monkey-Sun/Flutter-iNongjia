@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home/HomePage.dart';
-//import 'package:flutter_app/home/recommend_page.dart';
-import 'package:flutter_app/fenlei/CatogoryPage.dart';
-import 'package:flutter_app/global_config.dart';
 import 'package:flutter_app/profile/Profile.dart';
-import 'package:flutter_app/customwidget/custom_searchbar.dart';
+import 'package:flutter_app/cicle/CiclePage.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -22,12 +19,12 @@ class _IndexState extends State<Index> with AutomaticKeepAliveClientMixin {
        BottomNavigationBarItem(
           icon:  Icon(Icons.home), title:  Text("首页")),
        BottomNavigationBarItem(
-          icon:  Icon(Icons.camera), title:  Text("分类")),
+          icon:  Icon(Icons.camera), title:  Text("晒单")),
        BottomNavigationBarItem(
           icon:  Icon(Icons.person), title:  Text("个人"))
     ];
 
-    _screens = [ HomePage(),  CatogoryPage(),  ProfilePage()];
+    _screens = [ HomePage(),  CiclePage(),  ProfilePage()];
   }
 
   @override
