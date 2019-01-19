@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/utils/http_manager.dart';
+import 'package:flutter_app/utils/http.dart';
 import 'model.dart';
 
 class CiclePage extends StatefulWidget {
@@ -14,7 +14,6 @@ class CiclePageState extends State<CiclePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-//    _loadData();
   }
 
   @override
@@ -27,23 +26,25 @@ class CiclePageState extends State<CiclePage> {
           title: new Text('晒单'),
         ),
         body: Center(
-          child: Text("晒单"),
+          child: FlatButton(onPressed: (){
+            _loadFind();
+          }, child: Text("晒单"))
         ),
       ),
     );
   }
 }
 
-_loadData(){
-  var result;
-  HttpShareManager().get('v3/wxappapi/find', null, (res){
+_loadFind(){
+  Model result;
+  ShareHttp().get('v3/wxappapi/find', {
+    'userId': 29
+  }, (res){
     result = new Model.fromJson(res);
-    print(result);
-  }, (exception){
+  }, (){
 
   });
 }
-
 
 Widget _buildList(){
 

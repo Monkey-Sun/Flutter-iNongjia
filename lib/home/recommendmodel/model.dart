@@ -10,10 +10,10 @@ class Model {
 
   Model(this.StatusDesc, this.Status, this.Context);
 
-  //不同的类使用不同的mixin即可
+  //这一步是 map 转 dart模型
   factory Model.fromJson(Map<String, dynamic> json) => _$ModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ModelToJson(this);
+  //这一步是 转map 由于dio返回的是一个 map 因此这一步可省去
+//  Map<String, dynamic> toJson() => _$ModelToJson(this);
 }
 
 @JsonSerializable()
@@ -26,8 +26,6 @@ class Res {
 
   //不同的类使用不同的mixin即可
   factory Res.fromJson(Map<String, dynamic> json) => _$ResFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ResToJson(this);
 }
 
 @JsonSerializable()
@@ -62,7 +60,6 @@ class Goods {
   //不同的类使用不同的mixin即可
   factory Goods.fromJson(Map<String, dynamic> json) => _$GoodsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GoodsToJson(this);
 }
 
 
@@ -73,6 +70,4 @@ class Banner extends Object{
   Banner(this.imgUrl);
 
   factory Banner.fromJson(Map<String, dynamic> json) => _$BannerFromJson(json);
-
-  Map<String, dynamic> toJson() => _$BannerToJson(this);
 }

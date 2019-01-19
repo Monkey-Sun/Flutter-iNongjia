@@ -4,11 +4,12 @@ part 'basemodel.g.dart';
 @JsonSerializable()
 
 class BaseModel {
-  final String Status;
-  final String StatusDesc;
-  final Object Context;
+  @JsonKey(name: 'Status')
+  final String status;
+  @JsonKey(name: 'StatusDesc')
+  final String statusDesc;
 
-  BaseModel(this.StatusDesc, this.Status, this.Context);
+  BaseModel(this.statusDesc, this.status);
 
   //不同的类使用不同的mixin即可
   factory BaseModel.fromJson(Map<String, dynamic> json) => _$BaseModelFromJson(json);

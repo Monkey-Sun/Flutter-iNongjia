@@ -7,12 +7,10 @@ part of 'basemodel.dart';
 // **************************************************************************
 
 BaseModel _$BaseModelFromJson(Map<String, dynamic> json) {
-  return BaseModel(
-      json['StatusDesc'] as String, json['Status'] as String, json['Context']);
+  return BaseModel(json['StatusDesc'] as String, json['Status'] as String);
 }
 
 Map<String, dynamic> _$BaseModelToJson(BaseModel instance) => <String, dynamic>{
-      'Status': instance.Status,
-      'StatusDesc': instance.StatusDesc,
-      'Context': instance.Context
+      'Status': instance.status,
+      'StatusDesc': instance.statusDesc
     };

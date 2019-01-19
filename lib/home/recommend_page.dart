@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/global_config.dart';
-import 'package:flutter_app/utils/http_manager.dart';
+import 'package:flutter_app/utils/http.dart';
 import 'goods_detail.dart';
 import 'package:flutter_app/home/recommendmodel/model.dart';
 import 'package:flutter_app/animation_navigator.dart';
@@ -35,7 +35,7 @@ class RecommendState extends State<RecommendPage>
     setState(() {
       statu = RequestStatu.loading;
     });
-    HttpShareManager().get('v3/wxappapi/home', null, (res) {
+    ShareHttp().get('v3/wxappapi/home', null, (res) {
       result = new Model.fromJson(res);
       setState(() {
         statu = RequestStatu.success;

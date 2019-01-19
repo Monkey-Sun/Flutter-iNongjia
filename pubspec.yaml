@@ -11,6 +11,7 @@ dependencies:
   english_words: ^3.1.0
   json_annotation: ^2.0.0
   fluttertoast: ^2.2.6
+  dio: ^1.0.6
 
 dev_dependencies:
   flutter_test:
@@ -19,6 +20,7 @@ dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
   fluttertoast: ^2.2.6
+  dio: ^1.0.6
 
 
 # For information on the generic Dart part of this file, see the
