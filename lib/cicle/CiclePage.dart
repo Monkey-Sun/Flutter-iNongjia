@@ -41,6 +41,7 @@ _loadFind(){
     'userId': 29
   }, (res){
     result = new Model.fromJson(res);
+    print(result);
   }, (){
 
   });

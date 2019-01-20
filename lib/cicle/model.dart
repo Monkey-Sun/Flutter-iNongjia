@@ -19,32 +19,35 @@ class FindItem {
   final String nickname;
   final String avatar;
   final DateTime createTime;
-  Content content;
-  // 非常重要 因为 原始数据content 是一个json字符串， 需要这样转一下 才能成为对象
-  FindItem(this.nickname, this.avatar, this.createTime, String content){
-    Map<String, dynamic> map = jsonDecode(content);
-    var model = Content.fromJson(map);
-    this.content = model;
-  }
+  final Content content;
+
+  // 非常重要 因为 原始数据content 是一个json字符串， 需要这样转一下 才能成为对象  昨晚的写法的简写
+  FindItem(this.nickname, this.avatar, this.createTime, String content)
+      : content = Content.fromJson(jsonDecode(content));// 对final属性进行初始化
 
   factory FindItem.fromJson(Map<String, dynamic> json) =>
       _$FindItemFromJson(json);
 }
 
 @JsonSerializable()
-class Content{
+class Content {
   String textContent;
   List<Photo> photos;
+
   Content(this.textContent, this.photos);
-  factory Content.fromJson(Map<String, dynamic> json) => _$ContentFromJson(json);
+
+  factory Content.fromJson(Map<String, dynamic> json) =>
+      _$ContentFromJson(json);
 }
 
 @JsonSerializable()
-class Photo{
+class Photo {
   @JsonKey(name: 'ThumbUrl')
   final String thumbUrl;
   @JsonKey(name: 'ImgUrl')
   final String imgUrl;
+
   Photo(this.thumbUrl, this.imgUrl);
+
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
 }
