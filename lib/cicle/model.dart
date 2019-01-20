@@ -20,9 +20,11 @@ class FindItem {
   final String avatar;
   final DateTime createTime;
   final Content content;
+  final Product product;
+  final List<User> users;
 
   // 非常重要 因为 原始数据content 是一个json字符串， 需要这样转一下 才能成为对象  昨晚的写法的简写
-  FindItem(this.nickname, this.avatar, this.createTime, String content)
+  FindItem(this.nickname, this.avatar, this.createTime, String content, this.product, this.users)
       : content = Content.fromJson(jsonDecode(content));// 对final属性进行初始化
 
   factory FindItem.fromJson(Map<String, dynamic> json) =>
@@ -50,4 +52,26 @@ class Photo {
   Photo(this.thumbUrl, this.imgUrl);
 
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
+}
+
+
+@JsonSerializable()
+
+class Product{
+  final int productId;
+  final String productName;
+  final String cover;
+  final String productDesc;
+
+  Product(this.productId, this.productName, this.cover, this.productDesc);
+
+  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+}
+
+@JsonSerializable()
+
+class User{
+  final String avatar;
+  User(this.avatar);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

@@ -29,14 +29,23 @@ FindItem _$FindItemFromJson(Map<String, dynamic> json) {
       json['createTime'] == null
           ? null
           : DateTime.parse(json['createTime'] as String),
-      json['content'] as String);
+      json['content'] as String,
+      json['product'] == null
+          ? null
+          : Product.fromJson(json['product'] as Map<String, dynamic>),
+      (json['users'] as List)
+          ?.map((e) =>
+              e == null ? null : User.fromJson(e as Map<String, dynamic>))
+          ?.toList());
 }
 
 Map<String, dynamic> _$FindItemToJson(FindItem instance) => <String, dynamic>{
       'nickname': instance.nickname,
       'avatar': instance.avatar,
       'createTime': instance.createTime?.toIso8601String(),
-      'content': instance.content
+      'content': instance.content,
+      'product': instance.product,
+      'users': instance.users
     };
 
 Content _$ContentFromJson(Map<String, dynamic> json) {
@@ -59,3 +68,22 @@ Photo _$PhotoFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PhotoToJson(Photo instance) =>
     <String, dynamic>{'ThumbUrl': instance.thumbUrl, 'ImgUrl': instance.imgUrl};
+
+Product _$ProductFromJson(Map<String, dynamic> json) {
+  return Product(json['productId'] as int, json['productName'] as String,
+      json['cover'] as String, json['productDesc'] as String);
+}
+
+Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
+      'productId': instance.productId,
+      'productName': instance.productName,
+      'cover': instance.cover,
+      'productDesc': instance.productDesc
+    };
+
+User _$UserFromJson(Map<String, dynamic> json) {
+  return User(json['avatar'] as String);
+}
+
+Map<String, dynamic> _$UserToJson(User instance) =>
+    <String, dynamic>{'avatar': instance.avatar};
