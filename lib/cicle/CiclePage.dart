@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/utils/http.dart';
 import 'model.dart';
+import 'package:flutter_app/global_config.dart';
 
 class CiclePage extends StatefulWidget {
   @override
@@ -25,7 +26,8 @@ class CiclePageState extends State<CiclePage> {
     return new MaterialApp(
         home: new Scaffold(
             appBar: new AppBar(
-              title: new Text('晒单'),
+              title: new Text('晒单', style: TextStyle(color: Color(0xFF333333)),),
+              backgroundColor: GlobalConfig.appBarBackgroundColor,
             ),
             body: _buildStatus()));
   }
